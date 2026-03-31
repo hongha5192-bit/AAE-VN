@@ -30,7 +30,7 @@ app = FastAPI(title="AlphaAgentEvo Backtest API (Verl-compatible)", version="2.0
 class BacktestRequest(BaseModel):
     exprs: Dict[str, str]  # {"factor_name": "factor_expr"}
     backtest_start_time: str = "2016-01-01"
-    backtest_end_time: str = "2023-12-31"
+    backtest_end_time: str = "2020-12-31"
     start_cash: float = 10000000.0
     update_freq: int = 5
     label_forward_days: int = 5
@@ -49,9 +49,9 @@ class BacktestRequest(BaseModel):
 async def startup():
     """Pre-load data and configure periods."""
     configure_periods({
-        "train": {"start": "2016-01-01", "end": "2023-12-31"},
-        "val":   {"start": "2024-01-01", "end": "2024-12-31"},
-        "test":  {"start": "2025-01-01", "end": "2026-12-31"},
+        "train": {"start": "2016-01-01", "end": "2020-12-31"},
+        "val":   {"start": "2021-01-01", "end": "2021-12-31"},
+        "test":  {"start": "2022-01-01", "end": "2025-12-31"},
     })
     load_data()
     print("[API] Backtest API ready on /backtest")
@@ -152,7 +152,7 @@ async def example():
         "body": {
             "exprs": {"momentum_20d": "RANK(TS_PCTCHANGE($close, 20))"},
             "backtest_start_time": "2016-01-01",
-            "backtest_end_time": "2023-12-31",
+            "backtest_end_time": "2020-12-31",
         }
     }
 
