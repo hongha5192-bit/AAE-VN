@@ -18,9 +18,9 @@ import pandas as pd
 
 TOOL_NAME = "evaluate_factor"
 PERIOD_CONFIGS = {
-    "train": {"start": "2016-01-01", "end": "2023-12-31"},
-    "val": {"start": "2024-01-01", "end": "2024-12-31"},
-    "test": {"start": "2025-01-01", "end": "2026-12-31"},
+    "train": {"start": "2016-01-01", "end": "2020-12-31"},
+    "val": {"start": "2021-01-01", "end": "2021-12-31"},
+    "test": {"start": "2022-01-01", "end": "2025-12-31"},
 }
 FACTOR_RE = re.compile(r"^Factor:\s*(.+)$", re.MULTILINE)
 EXPR_RE = re.compile(r"^Expression:\s*(.+)$", re.MULTILINE)
