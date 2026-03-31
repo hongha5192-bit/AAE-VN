@@ -406,7 +406,7 @@ class FactorTool(BaseTool):
             r_expl += ALPHA_EXP * (1.0 - max_sim)
             prior_exprs.append(expr)
 
-        baseline = init_metric
+        baseline = max(0.0, init_metric)
         x = max(-20.0, min(20.0, best_trial_metric - baseline))
         r_perf = ALPHA_PERF * math.log1p(math.exp(x))
         r_streak = ALPHA_STREAK * float(instance.get("streak", 0))
