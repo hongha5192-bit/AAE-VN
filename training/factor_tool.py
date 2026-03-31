@@ -140,7 +140,7 @@ class FactorTool:
         payload_backtest = {
             "exprs": {factor_name: factor_expr},
             "backtest_start_time": "2016-01-01",
-            "backtest_end_time": "2020-12-31",
+            "backtest_end_time": "2023-12-31",
             "label_forward_days": 5,
         }
         try:

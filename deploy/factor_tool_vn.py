@@ -155,7 +155,7 @@ class FactorTool(BaseTool):
                 factor["name"]: factor["expr"]
             },
             "backtest_start_time": "2016-01-01",
-            "backtest_end_time": "2020-12-31",
+            "backtest_end_time": "2023-12-31",
             "start_cash": 10000000.0,
             "update_freq": 5,
             "label_forward_days": 5,
