@@ -1,0 +1,1 @@
+No train.log found under /Users/giaphu/Documents/Pylab/AAE-new/.kaggle-output

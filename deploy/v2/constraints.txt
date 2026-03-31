@@ -1,0 +1,10 @@
+# Critical runtime constraints for AlphaAgentEvo v2 on Kaggle.
+# Keep this file intentionally small and focused on packages that tend to drift.
+
+setuptools<81
+torch==2.6.0
+tensordict==0.6.2
+sglang==0.4.6.post5
+transformers==4.51.1
+tokenizers==0.21.4
+ray==2.54.0

@@ -1,0 +1,24 @@
+tools:
+  - class_name: "verl.tools.factor_tool.FactorTool"
+    config:
+      type: native
+      backtest_api_url: "http://localhost:8002/backtest"
+      backtest_start_time: "2016-01-01"
+      backtest_end_time: "2023-12-31"
+      stock_pool: "VN100"
+      start_cash: 10000000.0
+    tool_schema:
+      type: "function"
+      function:
+        name: "evaluate_factor"
+        description: "Evaluate an alpha factor expression by backtesting against Vietnam stock market data. Returns IR, IC, and ICIR."
+        parameters:
+          type: "object"
+          properties:
+            factor_name:
+              type: "string"
+              description: "A short descriptive name for the factor"
+            factor_expr:
+              type: "string"
+              description: "The factor expression using available variables ($open,$close,$high,$low,$volume,$return,$net_foreign_val,$net_foreign_vol,$bench_close,$bench_return,$amount,$industry) and operators"
+          required: ["factor_name", "factor_expr"]

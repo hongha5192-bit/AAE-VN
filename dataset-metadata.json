@@ -1,0 +1,14 @@
+{
+  "id": "gplebih/aae-new",
+  "title": "AAE-new",
+  "subtitle": "AlphaAgentEvo v2 training bundle for Kaggle runtime",
+  "description": "Self-contained repository bundle for Kaggle: setup scripts, runtime patches, training configs, and data files required by AlphaAgentEvo v2.",
+  "licenses": [
+    {
+      "name": "CC0-1.0"
+    }
+  ],
+  "keywords": [
+    "finance"
+  ]
+}
