@@ -375,7 +375,7 @@ echo "[train-entry] live_log=$TRAIN_LIVE_LOG pretty_log=$TRAIN_PRETTY_LOG stdout
     actor_rollout_ref.model.lora_alpha="$LORA_ALPHA" \
     actor_rollout_ref.model.target_modules="$LORA_TARGET_MODULES" \
     actor_rollout_ref.actor.optim.lr="$LEARNING_RATE" \
-    actor_rollout_ref.actor.optim.lr_warmup_steps_ratio=0.02 \
+    actor_rollout_ref.actor.optim.lr_warmup_steps_ratio="${LR_WARMUP_RATIO:-0.1}" \
     actor_rollout_ref.model.use_remove_padding=False \
     actor_rollout_ref.actor.use_torch_compile=False \
     actor_rollout_ref.actor.ppo_mini_batch_size="$PPO_MINI_BATCH_SIZE" \
