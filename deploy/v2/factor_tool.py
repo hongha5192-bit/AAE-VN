@@ -239,23 +239,24 @@ class FactorTool(BaseTool):
                 f'IR={metrics.get("ir", 0.0):.4f}, IC={metrics.get("ic", 0.0):.4f}, '
                 f'ICIR={metrics.get("icir", 0.0):.4f}'
             )
-            return response_text, step_reward, reward_summary
+            return response_text, step_reward, {self.tool_schema.function.name: step_reward}
 
         instance["failed_count"] += 1
         reward_summary = await self.calc_reward(instance_id)
+        fail_reward = float(reward_summary["score"])
         self._pretty_log(
             "[factor-live] result id=%s call=%d/%d status=failed reward=%.4f reason=%s expr=%s",
             self._instance_label(instance_id),
             call_count,
             self.max_tool_calls_per_turn,
-            float(reward_summary["score"]),
+            fail_reward,
             status,
             self._expr_preview(factor_expr),
         )
         return (
             f"failed: factor {factor_name} with expression {factor_expr}. Reason: {status}",
-            float(reward_summary["score"]),
-            reward_summary,
+            fail_reward,
+            {self.tool_schema.function.name: fail_reward},
         )
 
     async def _call_backtest_api(self, instance_id: str) -> tuple[float, str, dict[str, float]]:
