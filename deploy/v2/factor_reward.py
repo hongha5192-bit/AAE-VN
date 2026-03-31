@@ -193,14 +193,9 @@ def compute_score(solution_str, ground_truth=None, method="flexible", format_sco
     tagged_payloads, tag_error_reason = _extract_tagged_tool_payloads(response)
     tagged_valid_count, tagged_payload_error = _count_valid_payloads(tagged_payloads)
 
-    if tagged_valid_count > 0 and response.lstrip().startswith("<tool_call>") and not has_think:
-        return min(0.3 + 0.1 * (tagged_valid_count - 1), 0.6)
-
     if tagged_valid_count > 0:
-        reward = -0.15 + 0.20 * adherence
-        reason = "thinking_trace_present" if has_think else "tool_call_not_first_token"
-        _pretty_log_invalid("invalid_tool_call", reward, reason, response)
-        return reward
+        # Paper gives 1.0 for any valid <tool_call> JSON, regardless of <think> or position
+        return 1.0
 
     if tag_error_reason is not None:
         reward = -0.58 + 0.20 * adherence
