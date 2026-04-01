@@ -312,6 +312,24 @@ def patch_sglang_quantization() -> None:
     path.write_text(text)
 
 
+def patch_fsdp_workers_checkpoint_safety(verl_dir: Path) -> None:
+    path = verl_dir / "verl/workers/fsdp_workers.py"
+    text = path.read_text()
+    if "checkpoint save failed (non-fatal)" in text:
+        return
+
+    old = """        self.checkpoint_manager.save_checkpoint(local_path=local_path, hdfs_path=hdfs_path, global_step=global_step, max_ckpt_to_keep=max_ckpt_to_keep)
+        dist.barrier()"""
+    new = """        try:
+            self.checkpoint_manager.save_checkpoint(local_path=local_path, hdfs_path=hdfs_path, global_step=global_step, max_ckpt_to_keep=max_ckpt_to_keep)
+        except Exception as exc:
+            log_with_rank(f"checkpoint save failed (non-fatal): {exc}", rank=0, logger=logger)
+        dist.barrier()"""
+    if old not in text:
+        return  # silently skip if pattern doesn't match
+    path.write_text(text.replace(old, new, 1))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--verl-dir", required=True)
@@ -329,6 +347,7 @@ def main() -> None:
     patch_sglang_rollout_utils(verl_dir)
     patch_sglang_rollout_tool_kwargs(verl_dir)
     patch_fsdp_checkpoint_manager(verl_dir)
+    patch_fsdp_workers_checkpoint_safety(verl_dir)
     patch_dp_actor_flash_attn(verl_dir)
     patch_dp_critic_flash_attn(verl_dir)
     patch_sglang_quantization()
