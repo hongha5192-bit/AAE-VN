@@ -13,7 +13,7 @@ DATA="$WORK/data"
 LOGS="$WORK/logs"
 ENV_NAME="${ENV_NAME:-verl041}"
 
-MODEL="${MODEL:-Qwen/Qwen3-0.6B-MLX-bf16}"
+MODEL="${MODEL:-Qwen/Qwen3-4B-Thinking-2507}"
 API_BASE_URL="${API_BASE_URL:-http://localhost:8002}"
 HEALTH_URL="${API_BASE_URL%/}/health"
 export ALPHAEVO_BACKTEST_API_URL="${ALPHAEVO_BACKTEST_API_URL:-$API_BASE_URL/backtest}"
