@@ -382,7 +382,7 @@ class FactorTool(BaseTool):
         best_trial_result = instance.get("best_trial_result")
         best_trial_metrics = best_trial_result.get("metrics", {}) if isinstance(best_trial_result, dict) else {}
         # Paper Eq.(5): R = (R_cons + R_expl) / R_tool + R_perf * R_streak (all capped)
-        r_tool_raw = ALPHA_SUCC * call_count - ALPHA_FAIL * fail_count
+        r_tool_raw = ALPHA_SUCC * success_count - ALPHA_FAIL * fail_count
         r_tool_capped = min(r_tool_raw, CAP_TOOL)
         r_tool_denom = max(r_tool_capped, R_TOOL_FLOOR)
 
