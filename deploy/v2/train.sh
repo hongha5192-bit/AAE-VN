@@ -69,7 +69,7 @@ cp "$SCRIPT_DIR/factor_tool.py" "$VERL/verl/tools/factor_tool.py"
 mkdir -p "$VERL/examples/sglang_multiturn/config/tool_config"
 cp "$SCRIPT_DIR/factor_tool_config.yaml" "$VERL/examples/sglang_multiturn/config/tool_config/factor_tool_config.yaml"
 mkdir -p "$VERL/verl/utils/reward_score"
-cp "$SCRIPT_DIR/factor_reward.py" "$VERL/verl/utils/reward_score/factor.py"
+cp "$SCRIPT_DIR/factor_reward_v2.py" "$VERL/verl/utils/reward_score/factor.py"
 python "$SCRIPT_DIR/patch_verl.py" --verl-dir "$VERL"
 
 if ! command -v nvidia-smi >/dev/null 2>&1; then
