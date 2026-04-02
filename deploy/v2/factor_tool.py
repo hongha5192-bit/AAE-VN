@@ -41,7 +41,7 @@ ALPHA_STREAK = 0.15
 
 H_LOW = 0.1
 H_HIGH = 0.9
-R_TOOL_FLOOR = 0.01
+R_TOOL_FLOOR = 0.1
 
 try:
     from expression_manager.factor_ast import (  # type: ignore
