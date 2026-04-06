@@ -1,0 +1,368 @@
+[
+  {
+    "name": "KMID",
+    "expr": "($close-$open)/$open",
+    "Information_Ratio_with_cost": 0.0432,
+    "turn": 0
+  },
+  {
+    "name": "KLEN",
+    "expr": "($high-$low)/$open",
+    "Information_Ratio_with_cost": 0.0161,
+    "turn": 0
+  },
+  {
+    "name": "KLEN_Volatility_10d",
+    "expr": "TS_STD(($high - $low), 10) / $open",
+    "Information_Ratio_with_cost": 0.0066,
+    "turn": 1
+  },
+  {
+    "name": "KLEN_ForeignVolumeRatio",
+    "expr": "(($high - $low) / $open) * ($net_foreign_vol / $volume)",
+    "Information_Ratio_with_cost": -0.2279,
+    "turn": 1
+  },
+  {
+    "name": "KLEN_ForeignNetValueRatio",
+    "expr": "(($high - $low) / $open) * ($net_foreign_val / $open)",
+    "Information_Ratio_with_cost": -0.5186,
+    "turn": 1
+  },
+  {
+    "name": "KLEN_MA5",
+    "expr": "TS_MEAN(($high - $low), 5) / $open",
+    "Information_Ratio_with_cost": 0.7132,
+    "turn": 2
+  },
+  {
+    "name": "KLEN_STD3",
+    "expr": "TS_STD(($high - $low), 3) / $open",
+    "Information_Ratio_with_cost": 0.0865,
+    "turn": 2
+  },
+  {
+    "name": "KLEN_Close",
+    "expr": "($high - $low) / $close",
+    "Information_Ratio_with_cost": -0.0277,
+    "turn": 2
+  },
+  {
+    "name": "KLEN_MA2",
+    "expr": "TS_MEAN(($high - $low), 2) / $open",
+    "Information_Ratio_with_cost": 0.1468,
+    "turn": 3
+  },
+  {
+    "name": "KLEN_STD5",
+    "expr": "TS_STD(($high - $low), 5) / $open",
+    "Information_Ratio_with_cost": 0.1467,
+    "turn": 3
+  },
+  {
+    "name": "KLEN_MA5_Vol",
+    "expr": "TS_MEAN(($high - $low), 5) / $open * EXP(-0.5 * (TS_STD(($high - $low), 5) / $open)^2)",
+    "Information_Ratio_with_cost": NaN,
+    "turn": 3
+  },
+  {
+    "name": "KMID2",
+    "expr": "($close-$open)/($high-$low+1e-12)",
+    "Information_Ratio_with_cost": 0.5517,
+    "turn": 0
+  },
+  {
+    "name": "Range_Volatility_Normalized",
+    "expr": "($close - $open) / (TS_STD($high - $low, 5) + 1e-12)",
+    "Information_Ratio_with_cost": -0.2172,
+    "turn": 1
+  },
+  {
+    "name": "Return_Range_Ratio",
+    "expr": "$return / ($high - $low + 1e-12)",
+    "Information_Ratio_with_cost": -0.8293,
+    "turn": 1
+  },
+  {
+    "name": "Foreign_Flow_Range_Ratio",
+    "expr": "$net_foreign_val / ($high - $low + 1e-12)",
+    "Information_Ratio_with_cost": -0.2038,
+    "turn": 1
+  },
+  {
+    "name": "Abs_Momentum_Range",
+    "expr": "ABS($close - $open) / ($high - $low + 1e-12)",
+    "Information_Ratio_with_cost": -0.1655,
+    "turn": 2
+  },
+  {
+    "name": "KUP",
+    "expr": "($high-MAX($open,$close))/$open",
+    "Information_Ratio_with_cost": -0.4696,
+    "turn": 0
+  },
+  {
+    "name": "KUP_NEG",
+    "expr": "(MAX($open, $close) - $high) / $open",
+    "Information_Ratio_with_cost": -1.1356,
+    "turn": 1
+  },
+  {
+    "name": "KUP_VOL",
+    "expr": "($high - MAX($open, $close)) / $volume",
+    "Information_Ratio_with_cost": -1.434,
+    "turn": 1
+  },
+  {
+    "name": "KUP_LAG",
+    "expr": "($high - MAX(DELAY($open,1), DELAY($close,1))) / $open",
+    "Information_Ratio_with_cost": -0.4889,
+    "turn": 1
+  },
+  {
+    "name": "KUP2",
+    "expr": "($high-MAX($open,$close))/($high-$low+1e-12)",
+    "Information_Ratio_with_cost": -0.2955,
+    "turn": 0
+  },
+  {
+    "name": "KLOW",
+    "expr": "(MIN($open,$close)-$low)/$open",
+    "Information_Ratio_with_cost": -0.6477,
+    "turn": 0
+  },
+  {
+    "name": "KLOW_inv",
+    "expr": "( $low - MIN($open, $close) ) / $open",
+    "Information_Ratio_with_cost": -0.3855,
+    "turn": 1
+  },
+  {
+    "name": "KLOW_net_foreign",
+    "expr": "( MIN($open, $close) - $low ) / $open * $net_foreign_vol",
+    "Information_Ratio_with_cost": -0.3104,
+    "turn": 1
+  },
+  {
+    "name": "KLOW_5day",
+    "expr": "TS_MEAN( (MIN($open, $close) - $low ) / $open, 5 )",
+    "Information_Ratio_with_cost": -0.1482,
+    "turn": 1
+  },
+  {
+    "name": "KLOW_10day",
+    "expr": "TS_MEAN( (MIN($open, $close) - $low) / $open, 10 )",
+    "Information_Ratio_with_cost": 0.2067,
+    "turn": 2
+  },
+  {
+    "name": "KLOW_quantile",
+    "expr": "TS_QUANTILE( (MIN($open, $close) - $low) / $open, 0.75, 5 )",
+    "Information_Ratio_with_cost": NaN,
+    "turn": 2
+  },
+  {
+    "name": "KLOW_foreign_lag",
+    "expr": "DELAY( (MIN($open, $close) - $low) / $open, 1 ) * $net_foreign_vol",
+    "Information_Ratio_with_cost": -0.227,
+    "turn": 2
+  },
+  {
+    "name": "KLOW_15day",
+    "expr": "TS_MEAN( (MIN($open, $close) - $low) / $open, 15 )",
+    "Information_Ratio_with_cost": 0.2486,
+    "turn": 3
+  },
+  {
+    "name": "KLOW_std",
+    "expr": "TS_STD( (MIN($open, $close) - $low) / $open, 5 )",
+    "Information_Ratio_with_cost": -0.0863,
+    "turn": 3
+  },
+  {
+    "name": "KLOW_foreign_val",
+    "expr": " ( (MIN($open, $close) - $low) / $open ) * $net_foreign_val ",
+    "Information_Ratio_with_cost": -0.3738,
+    "turn": 3
+  },
+  {
+    "name": "KLOW2",
+    "expr": "(MIN($open,$close)-$low)/($high-$low+1e-12)",
+    "Information_Ratio_with_cost": 0.0325,
+    "turn": 0
+  },
+  {
+    "name": "KLOW2_ForeignVol",
+    "expr": "(MIN($open,$close) - $low) / ($high - $low + 1e-12) * $net_foreign_vol",
+    "Information_Ratio_with_cost": -0.3993,
+    "turn": 1
+  },
+  {
+    "name": "KLOW2_MA5",
+    "expr": "TS_MEAN((MIN($open,$close) - $low) / ($high - $low + 1e-12), 5)",
+    "Information_Ratio_with_cost": -0.5809,
+    "turn": 1
+  },
+  {
+    "name": "KLOW2_ForeignVolNorm",
+    "expr": "(MIN($open,$close) - $low) / ($high - $low + 1e-12) * ($net_foreign_vol / TS_SUM($net_foreign_vol, 5))",
+    "Information_Ratio_with_cost": 0.0132,
+    "turn": 1
+  },
+  {
+    "name": "KLOW2_ForeignVolRatio",
+    "expr": "(MIN($open,$close) - $low) / ($high - $low + 1e-12) * ($net_foreign_vol / $volume)",
+    "Information_Ratio_with_cost": -0.3039,
+    "turn": 2
+  },
+  {
+    "name": "KLOW2_ForeignVol_10",
+    "expr": "(MIN($open,$close) - $low) / ($high - $low + 1e-12) * ($net_foreign_vol / TS_SUM($net_foreign_vol, 10))",
+    "Information_Ratio_with_cost": -0.1423,
+    "turn": 2
+  },
+  {
+    "name": "KLOW2_ForeignVol_Diff",
+    "expr": "(MIN($open,$close) - $low) / ($high - $low + 1e-12) * (DELAY($net_foreign_vol, 1) - $net_foreign_vol) / $net_foreign_vol",
+    "Information_Ratio_with_cost": -0.6693,
+    "turn": 2
+  },
+  {
+    "name": "KLOW2_ForeignVol_3",
+    "expr": "(MIN($open,$close) - $low) / ($high - $low + 1e-12) * ($net_foreign_vol / TS_SUM($net_foreign_vol, 3))",
+    "Information_Ratio_with_cost": -0.2702,
+    "turn": 3
+  },
+  {
+    "name": "KLOW2_ForeignVol_Rank",
+    "expr": "(MIN($open,$close) - $low) / ($high - $low + 1e-12) * TS_RANK($net_foreign_vol, 10)",
+    "Information_Ratio_with_cost": 0.2065,
+    "turn": 3
+  },
+  {
+    "name": "KLOW2_ForeignVol_AbsDiff",
+    "expr": "(MIN($open,$close) - $low) / ($high - $low + 1e-12) * ABS((DELAY($net_foreign_vol, 1) - $net_foreign_vol) / $net_foreign_vol)",
+    "Information_Ratio_with_cost": -0.8253,
+    "turn": 3
+  },
+  {
+    "name": "KSFT",
+    "expr": "(2*$close-$high-$low)/$open",
+    "Information_Ratio_with_cost": 0.0396,
+    "turn": 0
+  },
+  {
+    "name": "KSFT2",
+    "expr": "(2*$close-$high-$low)/($high-$low+1e-12)",
+    "Information_Ratio_with_cost": -0.2437,
+    "turn": 0
+  },
+  {
+    "name": "KSFT2_Lagged",
+    "expr": "(2*$close - DELAY($high, 1) - DELAY($low, 1)) / (DELAY($high, 1) - DELAY($low, 1) + 1e-12)",
+    "Information_Ratio_with_cost": -0.5491,
+    "turn": 1
+  },
+  {
+    "name": "KSFT2_ForeignVol",
+    "expr": "((2*$close - $high - $low) / ($high - $low + 1e-12)) * ($net_foreign_vol / $volume)",
+    "Information_Ratio_with_cost": -0.9429,
+    "turn": 1
+  },
+  {
+    "name": "KSFT2_Ranked",
+    "expr": "TS_RANK((2*$close - $high - $low) / ($high - $low + 1e-12), 5)",
+    "Information_Ratio_with_cost": -0.7033,
+    "turn": 1
+  },
+  {
+    "name": "KSFT2_Smoothed",
+    "expr": "TS_MEAN((2*$close - $high - $low) / ($high - $low + 1e-12), 10)",
+    "Information_Ratio_with_cost": 0.5209,
+    "turn": 2
+  },
+  {
+    "name": "KSFT2_ZScore",
+    "expr": "(( (2*$close - $high - $low) / ($high - $low + 1e-12) ) - TS_MEAN((2*$close - $high - $low) / ($high - $low + 1e-12), 10)) / TS_STD((2*$close - $high - $low) / ($high - $low + 1e-12), 10)",
+    "Information_Ratio_with_cost": -0.5501,
+    "turn": 2
+  },
+  {
+    "name": "KSFT2_Smoothed_20",
+    "expr": "TS_MEAN((2*$close - $high - $low) / ($high - $low + 1e-12), 20)",
+    "Information_Ratio_with_cost": 0.5509,
+    "turn": 3
+  },
+  {
+    "name": "KSFT2_Smoothed_Rank_15",
+    "expr": "TS_RANK(TS_MEAN((2*$close - $high - $low) / ($high - $low + 1e-12), 10), 15)",
+    "Information_Ratio_with_cost": -0.8379,
+    "turn": 3
+  },
+  {
+    "name": "KSFT2_Smoothed_Foreign",
+    "expr": "TS_MEAN((2*$close - $high - $low) / ($high - $low + 1e-12), 10) * ($net_foreign_vol / $volume)",
+    "Information_Ratio_with_cost": -0.7325,
+    "turn": 3
+  },
+  {
+    "name": "OPEN0",
+    "expr": "$open/$close",
+    "Information_Ratio_with_cost": -0.352,
+    "turn": 0
+  },
+  {
+    "name": "OPEN_INV",
+    "expr": "$close/$open",
+    "Information_Ratio_with_cost": 0.0417,
+    "turn": 1
+  },
+  {
+    "name": "OPEN_RAT_5",
+    "expr": "TS_MEAN($open/$close, 5)",
+    "Information_Ratio_with_cost": -0.313,
+    "turn": 1
+  },
+  {
+    "name": "OPEN_FV",
+    "expr": "$net_foreign_vol * ($open/$close)",
+    "Information_Ratio_with_cost": -0.6374,
+    "turn": 1
+  },
+  {
+    "name": "LOG_INVERSE",
+    "expr": "LOG($close/$open)",
+    "Information_Ratio_with_cost": 0.0417,
+    "turn": 2
+  },
+  {
+    "name": "MEAN_INV_20",
+    "expr": "TS_MEAN($close/$open, 20)",
+    "Information_Ratio_with_cost": 0.9203,
+    "turn": 2
+  },
+  {
+    "name": "NET_INV",
+    "expr": "$net_foreign_vol * ($close/$open)",
+    "Information_Ratio_with_cost": -0.6235,
+    "turn": 2
+  },
+  {
+    "name": "MEAN_INV_15",
+    "expr": "TS_MEAN($close/$open, 15)",
+    "Information_Ratio_with_cost": 0.9249,
+    "turn": 3
+  },
+  {
+    "name": "RANK_INV",
+    "expr": "TS_RANK($close/$open, 20)",
+    "Information_Ratio_with_cost": -0.6953,
+    "turn": 3
+  },
+  {
+    "name": "QUANTILE_INV_90",
+    "expr": "TS_QUANTILE($close/$open, 0.9, 20)",
+    "Information_Ratio_with_cost": NaN,
+    "turn": 3
+  }
+]

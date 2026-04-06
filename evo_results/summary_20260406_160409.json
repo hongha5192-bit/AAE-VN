@@ -1,0 +1,92 @@
+[
+  {
+    "seed_name": "KMID",
+    "seed_expr": "($close-$open)/$open",
+    "seed_Information_Ratio_with_cost": 0.0432,
+    "best_Information_Ratio_with_cost": 0.0432,
+    "best_expr": "($close-$open)/$open",
+    "best_turn": 0,
+    "n_tried": 1
+  },
+  {
+    "seed_name": "KLEN",
+    "seed_expr": "($high-$low)/$open",
+    "seed_Information_Ratio_with_cost": 0.0161,
+    "best_Information_Ratio_with_cost": 0.7132,
+    "best_expr": "TS_MEAN(($high - $low), 5) / $open",
+    "best_turn": 2,
+    "n_tried": 10
+  },
+  {
+    "seed_name": "KMID2",
+    "seed_expr": "($close-$open)/($high-$low+1e-12)",
+    "seed_Information_Ratio_with_cost": 0.5517,
+    "best_Information_Ratio_with_cost": 0.5517,
+    "best_expr": "($close-$open)/($high-$low+1e-12)",
+    "best_turn": 0,
+    "n_tried": 5
+  },
+  {
+    "seed_name": "KUP",
+    "seed_expr": "($high-MAX($open,$close))/$open",
+    "seed_Information_Ratio_with_cost": -0.4696,
+    "best_Information_Ratio_with_cost": -0.4696,
+    "best_expr": "($high-MAX($open,$close))/$open",
+    "best_turn": 0,
+    "n_tried": 4
+  },
+  {
+    "seed_name": "KUP2",
+    "seed_expr": "($high-MAX($open,$close))/($high-$low+1e-12)",
+    "seed_Information_Ratio_with_cost": -0.2955,
+    "best_Information_Ratio_with_cost": -0.2955,
+    "best_expr": "($high-MAX($open,$close))/($high-$low+1e-12)",
+    "best_turn": 0,
+    "n_tried": 1
+  },
+  {
+    "seed_name": "KLOW",
+    "seed_expr": "(MIN($open,$close)-$low)/$open",
+    "seed_Information_Ratio_with_cost": -0.6477,
+    "best_Information_Ratio_with_cost": 0.2486,
+    "best_expr": "TS_MEAN( (MIN($open, $close) - $low) / $open, 15 )",
+    "best_turn": 3,
+    "n_tried": 10
+  },
+  {
+    "seed_name": "KLOW2",
+    "seed_expr": "(MIN($open,$close)-$low)/($high-$low+1e-12)",
+    "seed_Information_Ratio_with_cost": 0.0325,
+    "best_Information_Ratio_with_cost": 0.2065,
+    "best_expr": "(MIN($open,$close) - $low) / ($high - $low + 1e-12) * TS_RANK($net_foreign_vol, 10)",
+    "best_turn": 3,
+    "n_tried": 10
+  },
+  {
+    "seed_name": "KSFT",
+    "seed_expr": "(2*$close-$high-$low)/$open",
+    "seed_Information_Ratio_with_cost": 0.0396,
+    "best_Information_Ratio_with_cost": 0.0396,
+    "best_expr": "(2*$close-$high-$low)/$open",
+    "best_turn": 0,
+    "n_tried": 1
+  },
+  {
+    "seed_name": "KSFT2",
+    "seed_expr": "(2*$close-$high-$low)/($high-$low+1e-12)",
+    "seed_Information_Ratio_with_cost": -0.2437,
+    "best_Information_Ratio_with_cost": 0.5509,
+    "best_expr": "TS_MEAN((2*$close - $high - $low) / ($high - $low + 1e-12), 20)",
+    "best_turn": 3,
+    "n_tried": 9
+  },
+  {
+    "seed_name": "OPEN0",
+    "seed_expr": "$open/$close",
+    "seed_Information_Ratio_with_cost": -0.352,
+    "best_Information_Ratio_with_cost": 0.9249,
+    "best_expr": "TS_MEAN($close/$open, 15)",
+    "best_turn": 3,
+    "n_tried": 10
+  }
+]

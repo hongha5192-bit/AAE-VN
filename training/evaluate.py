@@ -534,6 +534,7 @@ def main():
     parser.add_argument("--max-log-chars", type=int, default=4000, help="Clip printed I/O text length per turn")
     parser.add_argument("--output-dir", default=None, help="Directory to save eval json")
     parser.add_argument("--label", default="", help="Label for this evaluation run")
+    parser.add_argument("--seeds", nargs="+", default=None, help="Filter to specific seed names only")
     args = parser.parse_args()
 
     label = args.label or (Path(args.checkpoint).name if args.checkpoint else "base")
@@ -547,11 +548,17 @@ def main():
     print(f"Max tool calls/turn: {args.max_tool_calls_per_turn}")
     print(f"Sampling: {'on' if args.do_sample else 'off'}")
     print(f"Print I/O: {'yes' if args.print_io else 'no'}")
+    if args.seeds:
+        print(f"Seed filter: {args.seeds}")
     print()
 
     # Load data
     seeds_df = pd.read_parquet(args.data)
-    print(f"Loaded {len(seeds_df)} seeds")
+    if args.seeds:
+        seeds_df = seeds_df[seeds_df["seed_name"].isin(args.seeds)].reset_index(drop=True)
+        print(f"Filtered to {len(seeds_df)} seeds: {seeds_df['seed_name'].tolist()}")
+    else:
+        print(f"Loaded {len(seeds_df)} seeds")
 
     # Load model
     model, tokenizer = load_model(args.base_model, args.checkpoint)
@@ -614,6 +621,18 @@ def main():
         for r in details:
             save_r = {k: v for k, v in r.items() if k != "all_results"}
             save_r["pass_at"] = {str(k): v for k, v in r.get("pass_at", {}).items()}
+            # Save evolved expressions: all valid (expr, ir) pairs + best expression
+            all_res = r.get("all_results", [])
+            save_r["evolved_expressions"] = [
+                {"factor_name": x["factor_name"], "factor_expr": x["factor_expr"], "ir": x["ir"], "success": x["success"]}
+                for x in all_res
+            ]
+            if all_res:
+                valid_res = [x for x in all_res if x["success"]]
+                if valid_res:
+                    best = max(valid_res, key=lambda x: x["ir"])
+                    save_r["best_expr"] = best["factor_expr"]
+                    save_r["best_expr_name"] = best["factor_name"]
             save_details.append(save_r)
         json.dump({"metrics": metrics, "details": save_details, "config": vars(args)}, f, indent=2, default=str)
     print(f"\nResults saved to {out_file}")
