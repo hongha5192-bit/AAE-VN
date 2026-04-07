@@ -1,0 +1,98 @@
+[
+  {
+    "name": "EMA5_10_Crossover_LogFlow_PoweredMom",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE(LOG(1 + ($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)), 10))",
+    "IR_without_cost": 0.6164,
+    "turn": 0
+  },
+  {
+    "name": "EMA5_10_Crossover_ZScoreShort",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE(LOG(1 + ($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)), 5))",
+    "IR_without_cost": 0.4089,
+    "turn": 1
+  },
+  {
+    "name": "EMA5_10_Crossover_FlowDev",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE(($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8), 10))",
+    "IR_without_cost": 0.8373,
+    "turn": 1
+  },
+  {
+    "name": "EMA5_10_Crossover_LogFlow_VolNorm",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE(LOG(1 + ($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8) * ($volume / TS_MEAN($volume, 20))), 10))",
+    "IR_without_cost": 0.1268,
+    "turn": 1
+  },
+  {
+    "name": "EMA5_10_Crossover_FlowDev_Z14",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE(($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8), 14))",
+    "IR_without_cost": 0.5872,
+    "turn": 2
+  },
+  {
+    "name": "EMA5_10_Crossover_FlowVol",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE( (($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)) * ($volume / TS_MEAN($volume, 14)), 10))",
+    "IR_without_cost": 0.3194,
+    "turn": 2
+  },
+  {
+    "name": "EMA5_10_Crossover_FlowVolChange",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE( (($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)) * (TS_PCTCHANGE($volume, 5) / TS_MEAN(TS_PCTCHANGE($volume, 5), 5)), 10))",
+    "IR_without_cost": 0.6353,
+    "turn": 2
+  },
+  {
+    "name": "EMA3_6_Crossover_FlowDevMomentum",
+    "expr": "RANK((EMA($close, 3)/EMA($close, 6) - 1) * TS_ZSCORE((($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)) * (TS_PCTCHANGE($net_foreign_val, 5) / TS_MEAN(TS_PCTCHANGE($net_foreign_val, 5), 5)), 10))",
+    "IR_without_cost": 0.5584,
+    "turn": 3
+  },
+  {
+    "name": "EMA5_10_Crossover_FlowDev_ReturnStd",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE((($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)) * (TS_STD($return, 5) / TS_MEAN(TS_STD($return, 5), 5)), 10))",
+    "IR_without_cost": 0.8409,
+    "turn": 3
+  },
+  {
+    "name": "EMA5_10_Crossover_FlowDev_VolStd",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE((($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)) * (TS_STD($volume, 5) / TS_MEAN(TS_STD($volume, 5), 5)), 10))",
+    "IR_without_cost": 0.3134,
+    "turn": 3
+  },
+  {
+    "name": "EMA5_10_Crossover_FlowDev_ReturnStd10",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE((($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)) * (TS_STD($return, 10) / TS_MEAN(TS_STD($return, 10), 5)), 10))",
+    "IR_without_cost": 0.5213,
+    "turn": 4
+  },
+  {
+    "name": "EMA5_10_Crossover_FlowDev_ReturnAbs",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE((($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)) * (TS_STD(ABS($return), 5) / TS_MEAN(TS_STD(ABS($return), 5), 5)), 10))",
+    "IR_without_cost": 0.6604,
+    "turn": 4
+  },
+  {
+    "name": "EMA5_10_Crossover_FlowDev_VolMomentum",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE((($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)) * (TS_PCTCHANGE($volume, 10) / TS_MEAN(TS_PCTCHANGE($volume, 10), 5)), 10))",
+    "IR_without_cost": 0.5276,
+    "turn": 4
+  },
+  {
+    "name": "EMA5_10_Crossover_FlowDev_ReturnStd7",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE((($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)) * (TS_STD($return, 7) / TS_MEAN(TS_STD($return, 7), 5)), 10))",
+    "IR_without_cost": 0.8543,
+    "turn": 5
+  },
+  {
+    "name": "EMA5_10_Crossover_FlowDev_ReturnAbs7",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE((($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)) * (TS_STD(ABS($return), 7) / TS_MEAN(TS_STD(ABS($return), 7), 5)), 10))",
+    "IR_without_cost": 0.7286,
+    "turn": 5
+  },
+  {
+    "name": "EMA5_10_Crossover_FlowDev_Momentum",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE((($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)) * (TS_PCTCHANGE($net_foreign_val, 5) / TS_MEAN(TS_PCTCHANGE($net_foreign_val, 5), 5)), 10))",
+    "IR_without_cost": 0.6071,
+    "turn": 5
+  }
+]

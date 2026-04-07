@@ -1,0 +1,11 @@
+[
+  {
+    "seed_name": "DecayFlowStdMom_Z",
+    "seed_expr": "ZSCORE(TS_RANK(TS_PCTCHANGE($close, 5), 5) * (DECAYLINEAR($net_foreign_val - DELAY($net_foreign_val, 1), 10) / (TS_STD($return, 14) + 1e-8)))",
+    "seed_IR_without_cost": 0.7044,
+    "best_IR_without_cost": 0.8951,
+    "best_expr": "ZSCORE(TS_ZSCORE(TS_PCTCHANGE($close,5),5) * (DECAYLINEAR($net_foreign_val - DELAY($net_foreign_val,1),8) / (TS_STD($return,13) + 1e-8)))",
+    "best_turn": 4,
+    "n_tried": 13
+  }
+]

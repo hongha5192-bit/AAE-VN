@@ -1,0 +1,11 @@
+[
+  {
+    "seed_name": "EMA5_10_Crossover_LogFlow_PoweredMom",
+    "seed_expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE(LOG(1 + ($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)), 10))",
+    "seed_IR_without_cost": 0.6164,
+    "best_IR_without_cost": 0.8543,
+    "best_expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE((($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)) * (TS_STD($return, 7) / TS_MEAN(TS_STD($return, 7), 5)), 10))",
+    "best_turn": 5,
+    "n_tried": 16
+  }
+]

@@ -23,17 +23,21 @@ from openai import OpenAI
 from pathlib import Path
 
 # ── Config ──────────────────────────────────────────────────────────────────
-MODEL_API   = "http://localhost:8100/v1"
-BACKTEST_API = "http://localhost:8002/backtest"  # existing server
-MODEL_NAME  = "qwen3-alpha"
+MODEL_API    = "http://localhost:8100/v1"
+BACKTEST_API = "http://localhost:8002/backtest"  # single-factor proxy (legacy)
+COMBO_API    = "http://localhost:8003/combo_backtest"  # multi-factor LGBModel combo
+MODEL_NAME   = "qwen3-alpha"
 
 SEEDS_FILE  = Path(__file__).parent / "run22_seeds.jsonl"
 RESULTS_DIR = Path(__file__).parent / "evo_results"
 RESULTS_DIR.mkdir(exist_ok=True)
 
 # VN data range
-BT_START = "2016-01-01"
-BT_END   = "2021-12-31"
+BT_START = "2022-01-01"
+BT_END   = "2025-12-31"
+
+# "Keep 2, Evolve 1" — fixed factors that stay constant during evolution
+FIXED_FACTORS = {}
 
 TOOL_SCHEMA = {
     "type": "function",
@@ -55,29 +59,31 @@ TOOL_SCHEMA = {
 VN_VARS = "$open, $close, $high, $low, $volume, $return, $net_foreign_val, $net_foreign_vol"
 
 SYSTEM_PROMPT = f"""You are a quantitative researcher specializing in Vietnam stock market alpha factors.
-Your objective is to evolve stock-selection factors to improve their IC (Information Coefficient).
+You are evolving one factor from a 3-factor ensemble. These 3 factors are combined as features in a LightGBM model to predict stock returns. Your goal is to improve the TARGET factor while complementing the other two.
 
 ## Available Variables
 {VN_VARS}
 
 ## Available Functions
-Time-series: TS_MEAN, TS_STD, TS_MAX, TS_MIN, TS_SUM, TS_RANK, TS_CORR, TS_QUANTILE, TS_ARGMAX, TS_ARGMIN
-Math: DELAY, ABS, LOG, EXP, SQRT, SIGN
-Logical: COUNT, SUMIF
+Time-series: TS_MEAN, TS_STD, TS_MAX, TS_MIN, TS_SUM, TS_RANK, TS_CORR, TS_QUANTILE, TS_ARGMAX, TS_ARGMIN, TS_ZSCORE, TS_PCTCHANGE, DECAYLINEAR, EMA
+Cross-sectional: RANK, ZSCORE
+Math: DELAY, ABS, LOG, EXP, SQRT, SIGN, MAX, MIN
+Statistics: MEDIAN, PERCENTILE, REGBETA
 
 ## Rules
 - ALWAYS use $ prefix for variables (e.g. $close, NOT close)
 - Only use variables listed above — no $amount, $vwap, etc.
 - Each turn: propose 2-3 evolved variants and call evaluate_factor for each
 - Analyze backtest feedback and improve systematically
-- Target IC > seed IC"""
+- Avoid high correlation with the other 2 ensemble factors — diversity improves ensemble performance
+- Target: improve the proxy metric AND maintain low correlation with the other factors"""
 
 
 client = OpenAI(api_key="EMPTY", base_url=MODEL_API, timeout=300)
 
 
 def backtest(name: str, expr: str, metric: str = "IC") -> tuple[float, str]:
-    """Run backtest via VN API."""
+    """Run backtest via single-factor proxy API."""
     req = {
         "exprs": {name: expr},
         "backtest_start_time": BT_START,
@@ -100,7 +106,31 @@ def backtest(name: str, expr: str, metric: str = "IC") -> tuple[float, str]:
         return np.nan, str(e)
 
 
-def execute_tool_calls(tool_calls: list, metric: str, log) -> tuple[list, list]:
+def combo_backtest(name: str, expr: str, metric: str = "IR_without_cost") -> tuple[float, str]:
+    """Run combo backtest: fixed factors + this evolved factor → LGBModel → IR.
+
+    Uses the combo API (port 8003) which trains LGBModel on all factors together
+    and returns portfolio metrics. This is the "Keep 2, Evolve 1" approach.
+    """
+    # Build factor_exprs: fixed factors + the new evolved one
+    factor_exprs = dict(FIXED_FACTORS)
+    factor_exprs[name] = expr
+
+    req = {"factor_exprs": factor_exprs}
+    try:
+        r = requests.post(COMBO_API, json=req, timeout=300)
+        if r.status_code == 200:
+            data = r.json().get("data", {})
+            if data and data.get("success"):
+                val = data.get(metric, np.nan)
+                return float(np.round(val, 4)), "success"
+            return np.nan, data.get("error", "no metrics")
+        return np.nan, f"HTTP {r.status_code}: {r.text[:200]}"
+    except Exception as e:
+        return np.nan, str(e)
+
+
+def execute_tool_calls(tool_calls: list, metric: str, log, use_combo: bool = False) -> tuple[list, list]:
     """Run all tool calls and return messages + metric values."""
     results, values = [], []
     for tc in tool_calls:
@@ -112,7 +142,10 @@ def execute_tool_calls(tool_calls: list, metric: str, log) -> tuple[list, list]:
             continue
         name = args.get("factor_name", "factor")
         expr = args.get("factor_expr", "")
-        val, status = backtest(name, expr, metric)
+        if use_combo:
+            val, status = combo_backtest(name, expr, metric)
+        else:
+            val, status = backtest(name, expr, metric)
         values.append(val)
         msg = f"Factor: {name} | expr: {expr} | {metric}: {val} | {status}"
         log(msg)
@@ -130,13 +163,22 @@ def execute_tool_calls(tool_calls: list, metric: str, log) -> tuple[list, list]:
     return results, values
 
 
-def evolve_one(seed: dict, n_turns: int, metric: str, log):
-    """Run multi-turn evolution for a single seed. Returns list of all tried factors."""
+def evolve_one(seed: dict, n_turns: int, metric: str, log, ensemble: list = None, use_combo: bool = False):
+    """Run multi-turn evolution for a single seed. Returns list of all tried factors.
+
+    Args:
+        ensemble: list of OTHER seeds in the ensemble (not including this seed).
+                  Passed as context so Qwen can evolve toward low-correlation variants.
+        use_combo: if True, use combo_backtest (LGBModel multi-factor) instead of single-factor proxy.
+    """
     seed_name = seed["name"]
     seed_expr = seed["expr"]
 
     # Step 1: backtest seed
-    init_val, status = backtest(seed_name, seed_expr, metric)
+    if use_combo:
+        init_val, status = combo_backtest(seed_name, seed_expr, metric)
+    else:
+        init_val, status = backtest(seed_name, seed_expr, metric)
     log(f"\n{'='*60}")
     log(f"SEED: {seed_name}")
     log(f"EXPR: {seed_expr}")
@@ -146,14 +188,24 @@ def evolve_one(seed: dict, n_turns: int, metric: str, log):
         log("Skipping — seed backtest failed")
         return []
 
+    # Build ensemble context string
+    ensemble_ctx = ""
+    if ensemble:
+        ensemble_ctx = "\n## The other factors in the ensemble (DO NOT modify these):\n"
+        for i, e in enumerate(ensemble, 1):
+            ensemble_ctx += f"Factor {i}: {e['name']}\nExpression: {e['expr']}\n\n"
+
     # Build initial messages
     user_content = (
-        f"Here is a seed factor and its {metric} on Vietnam stock market.\n"
-        f"Evolve it to improve {metric}:\n\n"
+        f"You are evolving the TARGET factor below. It is part of a 3-factor ensemble "
+        f"used in a LightGBM model on Vietnam stocks (test period 2022-2025).\n"
+        f"{ensemble_ctx}"
+        f"## TARGET factor to evolve:\n"
         f"Name: {seed_name}\n"
         f"Expression: {seed_expr}\n"
-        f"{metric}: {init_val}\n\n"
-        f"Propose 2-3 improved variants. Call evaluate_factor for each."
+        f"Proxy {metric}: {init_val}\n\n"
+        f"Propose 2-3 improved variants of the TARGET factor. "
+        f"Call evaluate_factor for each. Aim for higher {metric} and low correlation with the other factors."
     )
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
@@ -197,7 +249,7 @@ def evolve_one(seed: dict, n_turns: int, metric: str, log):
         })
 
         # Execute tool calls
-        tool_results, vals = execute_tool_calls(msg.tool_calls, metric, log)
+        tool_results, vals = execute_tool_calls(msg.tool_calls, metric, log, use_combo=use_combo)
         messages.extend(tool_results)
 
         # Track results
@@ -238,18 +290,35 @@ def main():
     parser.add_argument("--seeds", type=int, default=10, help="Number of seeds to evolve")
     parser.add_argument("--turns", type=int, default=3, help="Evolution turns per seed")
     parser.add_argument("--metric", type=str, default="Information_Ratio_with_cost", help="Metric to optimize")
-    parser.add_argument("--skip_amount", action="store_true", default=True, help="Skip seeds using $amount")
+    parser.add_argument("--combo", action="store_true", help="Use combo LGBModel evaluator (port 8003)")
+    parser.add_argument("--evolve_slot", type=int, default=None,
+                        help="Which factor slot to evolve (1,2,3). Others become fixed. Requires --combo.")
     args = parser.parse_args()
 
-    # Load Alpha158 seeds
+    # If combo mode, set up fixed factors and adjust metric
+    use_combo = args.combo
+    if use_combo:
+        args.metric = "IR_without_cost"  # combo metric
+
+    # Load seeds
     with open(SEEDS_FILE) as f:
         all_seeds = [json.loads(l) for l in f if l.strip()]
 
-    # Filter VN-compatible (no $amount)
-    seeds = all_seeds
-    selected = seeds[:args.seeds]
+    # "Keep 2, Evolve 1" setup
+    global FIXED_FACTORS
+    if use_combo and args.evolve_slot is not None and len(all_seeds) >= 3:
+        slot = args.evolve_slot - 1  # 0-indexed
+        FIXED_FACTORS = {s["name"]: s["expr"] for i, s in enumerate(all_seeds[:3]) if i != slot}
+        selected = [all_seeds[slot]]
+        print(f"COMBO MODE: Keep 2, Evolve slot {args.evolve_slot}")
+        print(f"  Fixed: {list(FIXED_FACTORS.keys())}")
+        print(f"  Evolving: {selected[0]['name']}")
+    else:
+        selected = all_seeds[:args.seeds]
 
     print(f"Evolving {len(selected)} seeds, {args.turns} turns each, metric={args.metric}")
+    if use_combo:
+        print(f"Using COMBO evaluator (LGBModel multi-factor, port 8003)")
     print(f"Results → {RESULTS_DIR}")
 
     run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -264,7 +333,10 @@ def main():
                 _lf.write(msg + "\n")
                 _lf.flush()
 
-            factors = evolve_one(seed, args.turns, args.metric, log)
+            # Pass the other seeds as ensemble context
+            ensemble_others = [s for s in all_seeds[:3] if s["name"] != seed["name"]]
+            factors = evolve_one(seed, args.turns, args.metric, log,
+                                ensemble=ensemble_others, use_combo=use_combo)
             all_results.extend(factors)
 
             if factors:

@@ -1,0 +1,11 @@
+[
+  {
+    "seed_name": "VolScaled5D_ZScoreMom_FlowSurprise",
+    "seed_expr": "ZSCORE(TS_ZSCORE(TS_SUM($return, 5), 5) * (($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_MEAN(MAX(MAX($high - $low, ABS($high - $close)), ABS($low - $close)), 14) + 1e-8)))",
+    "seed_IR_without_cost": 0.4701,
+    "best_IR_without_cost": 0.929,
+    "best_expr": "ZSCORE(TS_ZSCORE(TS_MEAN($return, 5), 5) * (($net_foreign_val - TS_MEDIAN($net_foreign_val, 12)) / (TS_MEAN($high - $low, 14) + 1e-8)))",
+    "best_turn": 5,
+    "n_tried": 13
+  }
+]

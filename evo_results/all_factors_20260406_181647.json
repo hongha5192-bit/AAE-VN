@@ -1,0 +1,182 @@
+[
+  {
+    "name": "VolScaled5D_ZScoreMom_FlowSurprise",
+    "expr": "ZSCORE(TS_ZSCORE(TS_SUM($return, 5), 5) * (($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_MEAN(MAX(MAX($high - $low, ABS($high - $close)), ABS($low - $close)), 14) + 1e-8)))",
+    "RankIC": 0.0114,
+    "turn": 0
+  },
+  {
+    "name": "EMA5_10_Crossover_LogFlow_PoweredMom",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE(LOG(1 + ($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)), 10))",
+    "RankIC": 0.0044,
+    "turn": 0
+  },
+  {
+    "name": "EMA5_10_Crossover_ZScore5",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE(LOG(1 + ($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)), 5))",
+    "RankIC": -0.0019,
+    "turn": 1
+  },
+  {
+    "name": "EMA5_10_Crossover_RatioZScore",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE(($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8), 10))",
+    "RankIC": 0.0018,
+    "turn": 1
+  },
+  {
+    "name": "EMA5_10_Crossover_VolFlowZScore",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE(LOG(1 + ($net_foreign_vol - TS_MEDIAN($net_foreign_vol, 20)) / (TS_STD($net_foreign_vol, 20) + 1e-8)), 10))",
+    "RankIC": 0.0034,
+    "turn": 1
+  },
+  {
+    "name": "EMA5_10_Crossover_ZScore15",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE(LOG(1 + ($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)), 15))",
+    "RankIC": -0.0004,
+    "turn": 2
+  },
+  {
+    "name": "EMA5_10_Crossover_RawFlowZScore",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE(($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8), 10))",
+    "RankIC": 0.0018,
+    "turn": 2
+  },
+  {
+    "name": "EMA5_10_Crossover_VolFlowZScore2",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE(LOG(1 + ($net_foreign_vol - TS_MEDIAN($net_foreign_vol, 20)) / (TS_STD($net_foreign_vol, 20) + 1e-8)), 15))",
+    "RankIC": -0.0013,
+    "turn": 2
+  },
+  {
+    "name": "EMA5_10_Crossover_QuantileZScore",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE(LOG(1 + ($net_foreign_val - TS_QUANTILE($net_foreign_val, 0.75)) / (TS_STD($net_foreign_val, 20) + 1e-8)), 10))",
+    "RankIC": NaN,
+    "turn": 3
+  },
+  {
+    "name": "EMA5_10_Crossover_VolFlowZScore12",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE(LOG(1 + ($net_foreign_vol - TS_MEDIAN($net_foreign_vol, 20)) / (TS_STD($net_foreign_vol, 20) + 1e-8)), 12))",
+    "RankIC": 0.0028,
+    "turn": 3
+  },
+  {
+    "name": "EMA5_10_Crossover_QuantileZScore2",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE(LOG(1 + ($net_foreign_val - TS_QUANTILE($net_foreign_val, 0.75, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)), 10))",
+    "RankIC": NaN,
+    "turn": 4
+  },
+  {
+    "name": "EMA5_10_Crossover_ZScore8",
+    "expr": "RANK((EMA($close, 5)/EMA($close, 10) - 1) * TS_ZSCORE(LOG(1 + ($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($net_foreign_val, 20) + 1e-8)), 8))",
+    "RankIC": 0.0034,
+    "turn": 4
+  },
+  {
+    "name": "EMA5_10_Crossover_ZScore7",
+    "expr": "RANK((EMA($close,5)/EMA($close,10)-1) * TS_ZSCORE(LOG(1 + ($net_foreign_val - TS_MEDIAN($net_foreign_val,20)) / (TS_STD($net_foreign_val,20) + 1e-8)), 7))",
+    "RankIC": 0.0019,
+    "turn": 5
+  },
+  {
+    "name": "EMA5_10_Crossover_VolFlow_ZScore8",
+    "expr": "RANK((EMA($close,5)/EMA($close,10)-1) * TS_ZSCORE(LOG(1 + ($net_foreign_vol - TS_MEDIAN($net_foreign_vol,20)) / (TS_STD($net_foreign_vol,20) + 1e-8)), 8))",
+    "RankIC": 0.0025,
+    "turn": 5
+  },
+  {
+    "name": "EMA5_10_Crossover_LogFlow_Std14",
+    "expr": "RANK((EMA($close,5)/EMA($close,10)-1) * TS_ZSCORE(LOG(1 + ($net_foreign_val - TS_MEDIAN($net_foreign_val,20)) / (TS_STD($net_foreign_val,14) + 1e-8)), 8))",
+    "RankIC": 0.0034,
+    "turn": 5
+  },
+  {
+    "name": "DecayFlowStdMom_Z",
+    "expr": "ZSCORE(TS_RANK(TS_PCTCHANGE($close, 5), 5) * (DECAYLINEAR($net_foreign_val - DELAY($net_foreign_val, 1), 10) / (TS_STD($return, 14) + 1e-8)))",
+    "RankIC": 0.0041,
+    "turn": 0
+  },
+  {
+    "name": "DecayFlowStdMom_Z_EMA",
+    "expr": "ZSCORE(TS_RANK(TS_PCTCHANGE($close, 5), 5) * (EMA($net_foreign_val - DELAY($net_foreign_val, 1), 10) / (TS_STD($return, 14) + 1e-8)))",
+    "RankIC": 0.0013,
+    "turn": 1
+  },
+  {
+    "name": "DecayFlowStdMom_Z_LongStd",
+    "expr": "ZSCORE(TS_RANK(TS_PCTCHANGE($close, 5), 5) * (DECAYLINEAR($net_foreign_val - DELAY($net_foreign_val, 1), 10) / (TS_STD($return, 20) + 1e-8)))",
+    "RankIC": 0.0039,
+    "turn": 1
+  },
+  {
+    "name": "DecayFlowStdMom_Z_Quantile",
+    "expr": "ZSCORE(TS_QUANTILE(TS_PCTCHANGE($close, 5), 0.75, 5) * (DECAYLINEAR($net_foreign_val - DELAY($net_foreign_val, 1), 10) / (TS_STD($return, 14) + 1e-8)))",
+    "RankIC": NaN,
+    "turn": 1
+  },
+  {
+    "name": "DecayFlowStdMom_Z_Std15",
+    "expr": "ZSCORE(TS_RANK(TS_PCTCHANGE($close, 5), 5) * (DECAYLINEAR($net_foreign_val - DELAY($net_foreign_val, 1), 10) / (TS_STD($return, 15) + 1e-8)))",
+    "RankIC": 0.004,
+    "turn": 2
+  },
+  {
+    "name": "DecayFlowStdMom_Z_ZScoreRank",
+    "expr": "ZSCORE(TS_ZSCORE(TS_PCTCHANGE($close, 5), 5) * (DECAYLINEAR($net_foreign_val - DELAY($net_foreign_val, 1), 10) / (TS_STD($return, 14) + 1e-8)))",
+    "RankIC": 0.0038,
+    "turn": 2
+  },
+  {
+    "name": "DecayFlowStdMom_Z_Decay8",
+    "expr": "ZSCORE(TS_RANK(TS_PCTCHANGE($close, 5), 5) * (DECAYLINEAR($net_foreign_val - DELAY($net_foreign_val, 1), 8) / (TS_STD($return, 14) + 1e-8)))",
+    "RankIC": 0.0033,
+    "turn": 3
+  },
+  {
+    "name": "DecayFlowStdMom_Z_Quantile50",
+    "expr": "ZSCORE(TS_QUANTILE(TS_PCTCHANGE($close, 5), 0.5, 5) * (DECAYLINEAR($net_foreign_val - DELAY($net_foreign_val, 1), 10) / (TS_STD($return, 14) + 1e-8)))",
+    "RankIC": NaN,
+    "turn": 3
+  },
+  {
+    "name": "DecayFlowStdMom_Z_Std12",
+    "expr": "ZSCORE(TS_RANK(TS_PCTCHANGE($close, 5), 5) * (DECAYLINEAR($net_foreign_val - DELAY($net_foreign_val, 1), 10) / (TS_STD($return, 12) + 1e-8)))",
+    "RankIC": 0.0041,
+    "turn": 3
+  },
+  {
+    "name": "DecayFlowStdMom_Z_Decay12",
+    "expr": "ZSCORE(TS_RANK(TS_PCTCHANGE($close, 5), 5) * (DECAYLINEAR($net_foreign_val - DELAY($net_foreign_val, 1), 12) / (TS_STD($return, 12) + 1e-8)))",
+    "RankIC": 0.0059,
+    "turn": 4
+  },
+  {
+    "name": "DecayFlowStdMom_Z_Rank7",
+    "expr": "ZSCORE(TS_RANK(TS_PCTCHANGE($close, 5), 7) * (DECAYLINEAR($net_foreign_val - DELAY($net_foreign_val, 1), 10) / (TS_STD($return, 12) + 1e-8)))",
+    "RankIC": 0.0043,
+    "turn": 4
+  },
+  {
+    "name": "DecayFlowStdMom_Z_Std10",
+    "expr": "ZSCORE(TS_RANK(TS_PCTCHANGE($close, 5), 5) * (DECAYLINEAR($net_foreign_val - DELAY($net_foreign_val, 1), 10) / (TS_STD($return, 10) + 1e-8)))",
+    "RankIC": 0.0043,
+    "turn": 4
+  },
+  {
+    "name": "DecayFlowStdMom_Z_Decay15",
+    "expr": "ZSCORE(TS_RANK(TS_PCTCHANGE($close, 5), 5) * (DECAYLINEAR($net_foreign_val - DELAY($net_foreign_val, 1), 15) / (TS_STD($return, 12) + 1e-8)))",
+    "RankIC": 0.003,
+    "turn": 5
+  },
+  {
+    "name": "DecayFlowStdMom_Z_Quantile8",
+    "expr": "ZSCORE(TS_QUANTILE(TS_PCTCHANGE($close, 5), 0.8, 5) * (DECAYLINEAR($net_foreign_val - DELAY($net_foreign_val, 1), 12) / (TS_STD($return, 12) + 1e-8)))",
+    "RankIC": NaN,
+    "turn": 5
+  },
+  {
+    "name": "DecayFlowStdMom_Z_EMA12",
+    "expr": "ZSCORE(TS_RANK(TS_PCTCHANGE($close, 5), 5) * (EMA($net_foreign_val - DELAY($net_foreign_val, 1), 12) / (TS_STD($return, 12) + 1e-8)))",
+    "RankIC": 0.0012,
+    "turn": 5
+  }
+]

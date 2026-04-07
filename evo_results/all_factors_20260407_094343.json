@@ -1,0 +1,80 @@
+[
+  {
+    "name": "VolScaled5D_ZScoreMom_FlowSurprise",
+    "expr": "ZSCORE(TS_ZSCORE(TS_SUM($return, 5), 5) * (($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_MEAN(MAX(MAX($high - $low, ABS($high - $close)), ABS($low - $close)), 14) + 1e-8)))",
+    "IR_without_cost": 0.4701,
+    "turn": 0
+  },
+  {
+    "name": "VolScaled5D_ZScoreMom_FlowSurprise_V1",
+    "expr": "ZSCORE(TS_ZSCORE(TS_SUM($return, 5), 5) * (($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_STD($return, 10) + 1e-8)))",
+    "IR_without_cost": 0.5351,
+    "turn": 1
+  },
+  {
+    "name": "VolScaled5D_ZScoreMom_FlowSurprise_V2",
+    "expr": "ZSCORE(TS_ZSCORE(TS_MEAN($return, 5), 5) * (($net_foreign_val - TS_MEDIAN($net_foreign_val, 20)) / (TS_MEAN(MAX(MAX($high - $low, ABS($high - $close)), ABS($low - $close)), 14) + 1e-8)))",
+    "IR_without_cost": 0.5377,
+    "turn": 1
+  },
+  {
+    "name": "VolScaled5D_ZScoreMom_FlowSurprise_V3",
+    "expr": "ZSCORE(TS_ZSCORE(TS_SUM($return, 5), 5) * (($net_foreign_val - TS_QUANTILE($net_foreign_val, 0.75, 20)) / (TS_MEAN(MAX(MAX($high - $low, ABS($high - $close)), ABS($low - $close)), 14) + 1e-8)))",
+    "IR_without_cost": NaN,
+    "turn": 1
+  },
+  {
+    "name": "VolScaled5D_ZScoreMom_FlowSurprise_V4",
+    "expr": "ZSCORE(TS_ZSCORE(TS_MEAN($return, 5), 5) * (($net_foreign_val - TS_MEDIAN($net_foreign_val, 10)) / (TS_MEAN($high - $low, 14) + 1e-8)))",
+    "IR_without_cost": 0.6,
+    "turn": 2
+  },
+  {
+    "name": "VolScaled5D_ZScoreMom_FlowSurprise_V5",
+    "expr": "ZSCORE(TS_ZSCORE(TS_SUM($return, 5), 5) * (($net_foreign_val - TS_MEDIAN($net_foreign_val, 10)) / (TS_MEAN(MAX(MAX($high - $low, ABS($high - $close)), ABS($low - $close)), 14) + 1e-8)))",
+    "IR_without_cost": 0.5883,
+    "turn": 2
+  },
+  {
+    "name": "VolScaled5D_ZScoreMom_FlowSurprise_V6",
+    "expr": "ZSCORE(TS_ZSCORE(TS_MEAN($return, 5), 5) * (($net_foreign_val - TS_MEDIAN($net_foreign_val, 10)) / (TS_STD($high - $low, 14) + 1e-8)))",
+    "IR_without_cost": 0.5674,
+    "turn": 3
+  },
+  {
+    "name": "VolScaled5D_ZScoreMom_FlowSurprise_V7",
+    "expr": "ZSCORE(TS_ZSCORE(TS_SUM($return, 5), 5) * (($net_foreign_val - TS_QUANTILE($net_foreign_val, 0.25, 10)) / (TS_MEAN($high - $low, 14) + 1e-8)))",
+    "IR_without_cost": NaN,
+    "turn": 3
+  },
+  {
+    "name": "VolScaled5D_ZScoreMom_FlowSurprise_V8",
+    "expr": "ZSCORE(TS_ZSCORE(TS_MEAN($return, 5), 5) * (($net_foreign_val - TS_MEDIAN($net_foreign_val, 10)) / (TS_MEAN($high - $low, 20) + 1e-8)))",
+    "IR_without_cost": 0.5141,
+    "turn": 4
+  },
+  {
+    "name": "VolScaled5D_ZScoreMom_FlowSurprise_V9",
+    "expr": "ZSCORE(TS_ZSCORE(TS_MEAN($return, 5), 5) * (($net_foreign_val - TS_MEDIAN($net_foreign_val, 15)) / (TS_MEAN($high - $low, 14) + 1e-8)))",
+    "IR_without_cost": 0.8448,
+    "turn": 4
+  },
+  {
+    "name": "VolScaled5D_ZScoreMom_FlowSurprise_V10",
+    "expr": "ZSCORE(TS_ZSCORE(TS_MEAN($return, 5), 5) * (($net_foreign_val - TS_MEDIAN($net_foreign_val, 15)) / (EMA($high - $low, 14) + 1e-8)))",
+    "IR_without_cost": 0.629,
+    "turn": 5
+  },
+  {
+    "name": "VolScaled5D_ZScoreMom_FlowSurprise_V11",
+    "expr": "ZSCORE(TS_ZSCORE(TS_MEAN($return, 5), 5) * (($net_foreign_val - TS_MEDIAN($net_foreign_val, 12)) / (TS_MEAN($high - $low, 14) + 1e-8)))",
+    "IR_without_cost": 0.929,
+    "turn": 5
+  },
+  {
+    "name": "VolScaled5D_ZScoreMom_FlowSurprise_V12",
+    "expr": "ZSCORE(TS_ZSCORE(TS_MEAN($return, 5), 5) * (($net_foreign_val - TS_MEDIAN($net_foreign_val, 18)) / (TS_MEAN($high - $low, 14) + 1e-8)))",
+    "IR_without_cost": 0.5558,
+    "turn": 5
+  }
+]
